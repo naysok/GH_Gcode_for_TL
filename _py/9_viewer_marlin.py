@@ -2,7 +2,7 @@
 ###                                                                          ###
 ###   GH_Gcode for TL                                                        ###
 ###                                                                          ###
-###       Component : Viewer_Marlin / 201123                                 ###
+###       Component : Viewer_Marlin / 210822                                 ###
 ###                                                                          ###
 ###                                                                          ###
 ###   Base Script >>> GH_Gcode                                               ###
@@ -10,6 +10,8 @@
 ###       Repository : https://github.com/naysok/GH_Gcode                    ###
 ###       Coding : naoki yoshioka (naysok)                                   ###
 ###       License : MIT License                                              ###
+###                                                                          ###
+###   Update, 210822 / ysok (G29)                                            ###
 ###                                                                          ###
 ################################################################################
 
@@ -241,6 +243,7 @@ class ViewerMarlin():
             ("G04" in gcode_line) or \
             ("G21" in gcode_line) or \
             ("G28" in gcode_line) or \
+            ("G29" in gcode_line) or \
             ("G90" in gcode_line) or \
             ("G91" in gcode_line) or \
             ("G92" in gcode_line):
@@ -425,7 +428,7 @@ vm = ViewerMarlin()
 ################################################################################
 
 
-ghenv.Component.Message = 'Viewer_Marlin / 201123'
+ghenv.Component.Message = 'Viewer_Marlin / 210822'
 
 
 print(PATH)
