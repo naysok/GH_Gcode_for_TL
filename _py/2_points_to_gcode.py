@@ -2,7 +2,7 @@
 ###                                                                          ###
 ###   GH_Gcode for TL                                                        ###
 ###                                                                          ###
-###       Component : (2) Points to gcode / 201123                           ###
+###       Component : (2) Points to gcode / 210822                           ###
 ###                                                                          ###
 ###                                                                          ###
 ###   Base Script >>> GH_Gcode                                               ###
@@ -10,6 +10,8 @@
 ###       Repository : https://github.com/naysok/GH_Gcode                    ###
 ###       Coding : naoki yoshioka (naysok)                                   ###
 ###       License : MIT License                                              ###
+###                                                                          ###
+###   Update, 210822 / ysok (Add Leveling)                                   ###
 ###                                                                          ###
 ################################################################################
 
@@ -367,7 +369,14 @@ class MarlinGcode():
         
         ### G28 - Auto Home
         homing = "G28 X0 ; Homing X\n"
-        return homing 
+        return homing
+
+    
+    def leveling(self):
+
+        ### G29 - Auto Leveling
+        leveling = "G29 ; Auto Leveling\n"
+        return leveling
 
 
     def reset_extrude_value(self):
@@ -423,6 +432,43 @@ class MarlinGcode():
         start.append(self.reset_extrude_value())
 
         start.append("; ----- Start Code -----\n")
+
+        start_join = "".join(start)
+
+        return start_join
+
+
+    def print_start_tl(self, fan, temp_bed, temp_nozzle):
+        
+        ### Ref
+        ### hineri_kazamatsuri.gcode
+
+        start = []
+
+        start.append("; ----- Start Code _ TL -----\n")
+
+        ### General Setting
+        start.append(self.define_general_settings())
+        
+        ### Start Fan
+        start.append(self.start_fan(fan))
+
+        ### Start Bed
+        start.append(self.start_bed(temp_bed))
+
+        ### Start Extruder
+        start.append(self.start_extruder(temp_nozzle))
+
+        ### Homing
+        start.append(self.homing_all_axes())
+
+        ### Leveling
+        start.append(self.leveling())
+
+        ### Reset Extruder Value
+        start.append(self.reset_extrude_value())
+
+        start.append("; ----- Start Code _ TL -----\n")
 
         start_join = "".join(start)
 
@@ -567,7 +613,9 @@ class MarlinGcode():
         export.append(self.define_print_parameter(component, e_amp, feed, temp_nozzle, temp_bed, fan, z_zuffer))
 
         ### Print Start
-        export.append(self.print_start(fan, temp_bed, temp_nozzle))
+        # export.append(self.print_start(fan, temp_bed, temp_nozzle))
+        export.append(self.print_start_tl(fan, temp_bed, temp_nozzle))
+
         
         ### Printing
         for i in xrange(len(points_list)):
@@ -595,10 +643,10 @@ op_ml = MarlinGcode()
 ##########
 
 
-ghenv.Component.Message = '(2) Points to gcode / 201123'
+ghenv.Component.Message = '(2) Points to gcode / 210822'
 
 
-comp_info = "ver0_201123"
+comp_info = "ver_210822"
 Z_OFFSET_VALUE = INFO
 FAN = 0
 
